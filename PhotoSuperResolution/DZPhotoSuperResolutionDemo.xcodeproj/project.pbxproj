@@ -1,0 +1,410 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		2F5B88692E2E5B82002186D4 /* VideoToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F5B88682E2E5B82002186D4 /* VideoToolbox.framework */; };
+		2FCA88ED2E2F8023000D42FB /* DZPhotoSuperResolutionDemoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCA88EA2E2F8023000D42FB /* DZPhotoSuperResolutionDemoApp.swift */; };
+		2FCA88EE2E2F8023000D42FB /* ContentViewData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCA88E92E2F8023000D42FB /* ContentViewData.swift */; };
+		2FCA88EF2E2F8023000D42FB /* DZUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCA88E52E2F8023000D42FB /* DZUtil.swift */; };
+		2FCA88F02E2F8023000D42FB /* DZLowLatencySuperResolutionScaler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCA88E02E2F8023000D42FB /* DZLowLatencySuperResolutionScaler.swift */; };
+		2FCA88F22E2F8023000D42FB /* DZPhotoSRScaler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCA88E12E2F8023000D42FB /* DZPhotoSRScaler.swift */; };
+		2FCA88F32E2F8023000D42FB /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCA88E82E2F8023000D42FB /* ContentView.swift */; };
+		2FCA88F42E2F8023000D42FB /* DZSwiftUIHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCA88E42E2F8023000D42FB /* DZSwiftUIHelper.swift */; };
+		2FCA88F52E2F8023000D42FB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2FCA88E72E2F8023000D42FB /* Assets.xcassets */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		2F5B88682E2E5B82002186D4 /* VideoToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VideoToolbox.framework; path = System/Library/Frameworks/VideoToolbox.framework; sourceTree = SDKROOT; };
+		2FCA88E02E2F8023000D42FB /* DZLowLatencySuperResolutionScaler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DZLowLatencySuperResolutionScaler.swift; sourceTree = "<group>"; };
+		2FCA88E12E2F8023000D42FB /* DZPhotoSRScaler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DZPhotoSRScaler.swift; sourceTree = "<group>"; };
+		2FCA88E42E2F8023000D42FB /* DZSwiftUIHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DZSwiftUIHelper.swift; sourceTree = "<group>"; };
+		2FCA88E52E2F8023000D42FB /* DZUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DZUtil.swift; sourceTree = "<group>"; };
+		2FCA88E72E2F8023000D42FB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		2FCA88E82E2F8023000D42FB /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		2FCA88E92E2F8023000D42FB /* ContentViewData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewData.swift; sourceTree = "<group>"; };
+		2FCA88EA2E2F8023000D42FB /* DZPhotoSuperResolutionDemoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DZPhotoSuperResolutionDemoApp.swift; sourceTree = "<group>"; };
+		2FEDB8C12E28AC1300961C82 /* DZPhotoSuperResolutionDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DZPhotoSuperResolutionDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		2FEDB8BE2E28AC1300961C82 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2F5B88692E2E5B82002186D4 /* VideoToolbox.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		2F5B88672E2E5B81002186D4 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				2F5B88682E2E5B82002186D4 /* VideoToolbox.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		2FCA88E32E2F8023000D42FB /* Processer */ = {
+			isa = PBXGroup;
+			children = (
+				2FCA88E12E2F8023000D42FB /* DZPhotoSRScaler.swift */,
+				2FCA88E02E2F8023000D42FB /* DZLowLatencySuperResolutionScaler.swift */,
+			);
+			path = Processer;
+			sourceTree = "<group>";
+		};
+		2FCA88E62E2F8023000D42FB /* Util */ = {
+			isa = PBXGroup;
+			children = (
+				2FCA88E42E2F8023000D42FB /* DZSwiftUIHelper.swift */,
+				2FCA88E52E2F8023000D42FB /* DZUtil.swift */,
+			);
+			path = Util;
+			sourceTree = "<group>";
+		};
+		2FCA88EC2E2F8023000D42FB /* DZPhotoSuperResolutionDemo */ = {
+			isa = PBXGroup;
+			children = (
+				2FCA88E32E2F8023000D42FB /* Processer */,
+				2FCA88E62E2F8023000D42FB /* Util */,
+				2FCA88E72E2F8023000D42FB /* Assets.xcassets */,
+				2FCA88E82E2F8023000D42FB /* ContentView.swift */,
+				2FCA88E92E2F8023000D42FB /* ContentViewData.swift */,
+				2FCA88EA2E2F8023000D42FB /* DZPhotoSuperResolutionDemoApp.swift */,
+			);
+			path = DZPhotoSuperResolutionDemo;
+			sourceTree = "<group>";
+		};
+		2FEDB8B82E28AC1300961C82 = {
+			isa = PBXGroup;
+			children = (
+				2FCA88EC2E2F8023000D42FB /* DZPhotoSuperResolutionDemo */,
+				2F5B88672E2E5B81002186D4 /* Frameworks */,
+				2FEDB8C22E28AC1300961C82 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		2FEDB8C22E28AC1300961C82 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				2FEDB8C12E28AC1300961C82 /* DZPhotoSuperResolutionDemo.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		2FEDB8C02E28AC1300961C82 /* DZPhotoSuperResolutionDemo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2FEDB8CC2E28AC1400961C82 /* Build configuration list for PBXNativeTarget "DZPhotoSuperResolutionDemo" */;
+			buildPhases = (
+				2FEDB8BD2E28AC1300961C82 /* Sources */,
+				2FEDB8BE2E28AC1300961C82 /* Frameworks */,
+				2FEDB8BF2E28AC1300961C82 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = DZPhotoSuperResolutionDemo;
+			packageProductDependencies = (
+			);
+			productName = DZPhotoSuperResolutionDemo;
+			productReference = 2FEDB8C12E28AC1300961C82 /* DZPhotoSuperResolutionDemo.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		2FEDB8B92E28AC1300961C82 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2600;
+				LastUpgradeCheck = 2600;
+				TargetAttributes = {
+					2FEDB8C02E28AC1300961C82 = {
+						CreatedOnToolsVersion = 26.0;
+					};
+				};
+			};
+			buildConfigurationList = 2FEDB8BC2E28AC1300961C82 /* Build configuration list for PBXProject "DZPhotoSuperResolutionDemo" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 2FEDB8B82E28AC1300961C82;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 2FEDB8C22E28AC1300961C82 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				2FEDB8C02E28AC1300961C82 /* DZPhotoSuperResolutionDemo */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		2FEDB8BF2E28AC1300961C82 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2FCA88F52E2F8023000D42FB /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		2FEDB8BD2E28AC1300961C82 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2FCA88ED2E2F8023000D42FB /* DZPhotoSuperResolutionDemoApp.swift in Sources */,
+				2FCA88EE2E2F8023000D42FB /* ContentViewData.swift in Sources */,
+				2FCA88EF2E2F8023000D42FB /* DZUtil.swift in Sources */,
+				2FCA88F02E2F8023000D42FB /* DZLowLatencySuperResolutionScaler.swift in Sources */,
+				2FCA88F22E2F8023000D42FB /* DZPhotoSRScaler.swift in Sources */,
+				2FCA88F32E2F8023000D42FB /* ContentView.swift in Sources */,
+				2FCA88F42E2F8023000D42FB /* DZSwiftUIHelper.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		2FEDB8CA2E28AC1400961C82 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = Q5X7KH5J9K;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		2FEDB8CB2E28AC1400961C82 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = Q5X7KH5J9K;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		2FEDB8CD2E28AC1400961C82 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = Q5X7KH5J9K;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = DZPhotoSuperResolutionDemo/Info.plist;
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "我们需要访问您的照片库以保存处理后的图片";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dazz.camera.test.demo;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		2FEDB8CE2E28AC1400961C82 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = Q5X7KH5J9K;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = DZPhotoSuperResolutionDemo/Info.plist;
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "我们需要访问您的照片库以保存处理后的图片";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dazz.camera.test.demo;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		2FEDB8BC2E28AC1300961C82 /* Build configuration list for PBXProject "DZPhotoSuperResolutionDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2FEDB8CA2E28AC1400961C82 /* Debug */,
+				2FEDB8CB2E28AC1400961C82 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2FEDB8CC2E28AC1400961C82 /* Build configuration list for PBXNativeTarget "DZPhotoSuperResolutionDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2FEDB8CD2E28AC1400961C82 /* Debug */,
+				2FEDB8CE2E28AC1400961C82 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 2FEDB8B92E28AC1300961C82 /* Project object */;
+}
