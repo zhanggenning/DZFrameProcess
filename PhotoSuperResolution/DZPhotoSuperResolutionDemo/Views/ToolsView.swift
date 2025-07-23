@@ -25,8 +25,9 @@ struct DZToolsView: View {
             ToolButton("tray.and.arrow.down") { save() }
                 .disabled(datas.outputImage == nil)
             
+            let shareItems = (datas.outputImage != nil ? [datas.outputImage!] : [])
             ToolButton("square.and.arrow.up") { isShowShare = true }
-                .share(isShown: $isShowShare, items: datas.shareItems)
+                .share(isShown: $isShowShare, items: shareItems)
                 .disabled(datas.outputImage == nil)
             
             if !datas.supportFactors.isEmpty {
@@ -80,7 +81,10 @@ struct DZToolsView: View {
         Task {
             defer { datas.state = .completed }
             do {
-                try await datas.process()
+                let start = Int(CACurrentMediaTime()*1000)
+                datas.outputImage = try await datas.createSRScaler().run()
+                let end = Int(CACurrentMediaTime()*1000)
+                datas.duration = end-start
             }
             catch { infoMsg = String(describing: error) }
         }

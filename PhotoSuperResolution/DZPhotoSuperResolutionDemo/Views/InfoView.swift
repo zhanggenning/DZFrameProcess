@@ -13,14 +13,12 @@ struct DZInfoView: View {
     @Environment(ContentViewData.self) private var datas
     
     var body: some View {
-        let inputImage = datas.inputImage
-        let outputImage = datas.outputImage
         VStack(alignment: .leading) {
             HStack {
-                if let inputImage = inputImage {
+                if let inputImage = datas.inputImage {
                     Text("Input: \(Int(inputImage.size.width))x\(Int(inputImage.size.height))")
                 }
-                if let outputImage = outputImage {
+                if let outputImage = datas.outputImage {
                     Text("Output: \(Int(outputImage.size.width))x\(Int(outputImage.size.height))")
                 }
             }

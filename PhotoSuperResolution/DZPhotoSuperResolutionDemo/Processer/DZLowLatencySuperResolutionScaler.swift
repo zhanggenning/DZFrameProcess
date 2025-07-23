@@ -68,23 +68,7 @@ actor DZLowLatencySRScaler: DZPhotoSRScaler {
 }
 
 extension DZLowLatencySRScaler {
-    
-    static var isSupported: Bool {
-        VTLowLatencySuperResolutionScalerConfiguration.isSupported
-    }
-    
-    static var maximumDimensions: CMVideoDimensions? {
-        VTLowLatencySuperResolutionScalerConfiguration.maximumDimensions
-    }
-    
-    static var minimumDimensions: CMVideoDimensions? {
-        VTLowLatencySuperResolutionScalerConfiguration.minimumDimensions
-    }
-    
-    static func supportedScaleFactors(size: CGSize) -> [Float] {
-        VTLowLatencySuperResolutionScalerConfiguration.supportedScaleFactors(frameWidth: Int(size.width), frameHeight: Int(size.height))
-    }
-    
+
     static func check(width: Int, height: Int, factor: Float) throws {
         
         guard VTLowLatencySuperResolutionScalerConfiguration.isSupported else {

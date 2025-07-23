@@ -19,11 +19,6 @@ final class ContentViewData {
         case completed
     }
     
-    enum SRScalerType {
-        case lowlatency
-        case normal
-    }
-    
     var state: State = .idle
     
     var inputImage: UIImage? = nil
@@ -34,10 +29,6 @@ final class ContentViewData {
 
     var scalerType: SRScalerType = .lowlatency
         
-    var shareItems: [UIImage] {
-        outputImage != nil ? [outputImage!] : []
-    }
-    
     func reset() {
         state = .idle
         inputImage = nil
@@ -48,69 +39,19 @@ final class ContentViewData {
 }
 
 extension ContentViewData {
-    enum Fault: Error {
-        case inputIsNil
-        case unsupportEffect
-    }
-}
-
-extension ContentViewData {
-    //是否支持
-    var isSupport: Bool {
-        switch scalerType {
-        case .lowlatency: return DZLowLatencySRScaler.isSupported
-        case .normal: return false
-        }
-    }
     
-    //支持的缩放倍数
+    var isSupport: Bool { DZPhotoProcesser.isSupport(for: scalerType) }
+    
+    var maxSize: CMVideoDimensions? { DZPhotoProcesser.maxSize(for: scalerType) }
+    
+    var minSize: CMVideoDimensions? { DZPhotoProcesser.minSize(for: scalerType) }
+    
     var supportFactors: [Float] {
-        guard let size = inputImage?.size else { return [] }
-        switch scalerType {
-        case .lowlatency:
-            return DZLowLatencySRScaler.supportedScaleFactors(size: size)
-        case .normal:
-            return []
-        }
+        guard let inputImage = inputImage else { return [] }
+        return DZPhotoProcesser.supportFactors(for: scalerType, size: inputImage.size)
     }
     
-    //最大尺寸
-    var maxSize: CMVideoDimensions? {
-        switch scalerType {
-        case .lowlatency: return DZLowLatencySRScaler.maximumDimensions
-        case .normal: return nil
-        }
-    }
-    
-    //最小尺寸
-    var minSize: CMVideoDimensions? {
-        switch scalerType {
-        case .lowlatency: return DZLowLatencySRScaler.minimumDimensions
-        case .normal: return nil
-        }
-    }
-}
-
-extension ContentViewData {
-    
-    @MainActor
-    func process() async throws {
-        let start = Int(CACurrentMediaTime()*1000)
-        let scaler = try createPhotoSRScaler(type: scalerType)
-        self.outputImage = try await scaler.run()
-        let end = Int(CACurrentMediaTime()*1000)
-        self.duration = end-start
-    }
-    
-    private func createPhotoSRScaler(type: SRScalerType) throws -> DZPhotoSRScaler {
-        guard let input = inputImage, let factor = factor else {
-            throw Fault.inputIsNil
-        }
-        switch type {
-        case .lowlatency:
-            return try DZLowLatencySRScaler(input: input, factor: factor)
-        case .normal:
-            throw Fault.unsupportEffect
-        }
+    func createSRScaler() throws -> DZPhotoSRScaler {
+        try DZPhotoProcesser.createPhotoSRScaler(effect: scalerType, inputImage: inputImage, factor: factor)
     }
 }
