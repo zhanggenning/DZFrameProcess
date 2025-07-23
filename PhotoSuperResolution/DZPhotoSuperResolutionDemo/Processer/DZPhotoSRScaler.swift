@@ -13,7 +13,7 @@ protocol DZPhotoSRScaler: Actor {
     
     typealias Fault = DZPhotoProcessError
 
-    func run(_ input: UIImage, factor: Float) async throws -> UIImage
+    func run() async throws -> UIImage
 }
 
 extension DZPhotoSRScaler {
@@ -34,7 +34,6 @@ extension DZPhotoSRScaler {
         return pixelBufferPool
     }
     
-    // This creates `CVPixelBuffer` from the provided `CVPixelBufferPool`.
     static func createPixelBuffer(from pixelBufferPool: CVPixelBufferPool) throws -> CVPixelBuffer {
 
         var outputPixelBuffer: CVPixelBuffer?
@@ -48,49 +47,17 @@ extension DZPhotoSRScaler {
         return outputPixelBuffer
     }
     
-    static func pixelBuffer(from image: UIImage,
-                            with attributes: [String: any Sendable]?) throws -> CVPixelBuffer {
-        
+    static func createPixelBuffer(from image: UIImage, in pool: CVPixelBufferPool) async throws -> CVPixelBuffer {
         guard let input = image.cgImage else {
             throw Fault.failedToRequestCGImage
         }
-        let size = image.size
-        var pixelBuffer:CVPixelBuffer? = nil
-        let status = CVPixelBufferCreate(kCFAllocatorDefault,
-                                         Int(size.width),
-                                         Int(size.height),
-                                         kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange,
-                                         attributes as CFDictionary?,
-                                         &pixelBuffer)
-
-        guard status == kCVReturnSuccess, let buffer = pixelBuffer else {
-            throw Fault.failedToCreatePixelBuffer
-        }
-        
-        let context = CIContext(options: [
-            .cacheIntermediates: false,
-            .outputColorSpace: CGColorSpaceCreateDeviceRGB()
-        ])
-
-        CVPixelBufferLockBaseAddress(buffer, [])
-        defer { CVPixelBufferUnlockBaseAddress(buffer, []) }
-
-        let ciImage = CIImage(cgImage: input)
-        context.render(
-            ciImage
-                .transformed(by: CGAffineTransform(
-                    scaleX: CGFloat(size.width)  / ciImage.extent.width,
-                    y:      CGFloat(size.height) / ciImage.extent.height
-                )),
-            to: buffer,
-            bounds: CGRect(origin: .zero, size: size),
-            colorSpace: CGColorSpaceCreateDeviceRGB()
-        )
-        
+        let buffer = try Self.createPixelBuffer(from: pool)
+        let ctx = DZPhotoProcessContext.shared
+        await ctx.render(cgImage: input, to: buffer)
         return buffer
     }
     
-    static func image(from buffer: CVPixelBuffer) throws -> UIImage {
+    static func createImage(from buffer: CVPixelBuffer) throws -> UIImage {
         var cgImage: CGImage?
         let status = VTCreateCGImageFromCVPixelBuffer(buffer, options: nil, imageOut: &cgImage)
         guard status == kCVReturnSuccess, let cgImage = cgImage else {
@@ -112,4 +79,29 @@ enum DZPhotoProcessError: Error {
     case failedToCreateCGContext
     case failedToCreateCGImage
     case missingImageBuffer
+}
+
+actor DZPhotoProcessContext {
+    
+    static let shared = DZPhotoProcessContext()
+    
+    private let colorSpace = CGColorSpaceCreateDeviceRGB()
+    
+    let ctx = CIContext(options: [
+        .cacheIntermediates: false,
+        .outputColorSpace: CGColorSpaceCreateDeviceRGB()
+    ])
+    
+    public func render(cgImage: CGImage, to buffer: CVPixelBuffer) {
+        let ciImage = CIImage(cgImage: cgImage)
+        let width = cgImage.width
+        let height = cgImage.height
+        let size = CGSize(width: width, height: height)
+        ctx.render(
+            ciImage,
+            to: buffer,
+            bounds: CGRect(origin: .zero, size: size),
+            colorSpace: colorSpace
+        )
+    }
 }

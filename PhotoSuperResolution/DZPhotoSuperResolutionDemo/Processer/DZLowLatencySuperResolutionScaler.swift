@@ -11,26 +11,81 @@ import UIKit
 
 actor DZLowLatencySRScaler: DZPhotoSRScaler {
     
-    private var factor: Float = 1.0
-    private var inputSize: CGSize = .zero
+    private let inputImage: UIImage
+    private let factor: Float
+    private var inputSize: CGSize { inputImage.size }
     
-    nonisolated(unsafe) var frameProcessor: VTFrameProcessor? = VTFrameProcessor()
-    private var configuration: VTLowLatencySuperResolutionScalerConfiguration? = nil
-    private var pixelBufferPool: CVPixelBufferPool? = nil
-    private var sourcePixelBufferAttributes: [String: any Sendable]? = nil
+    nonisolated(unsafe) let frameProcessor: VTFrameProcessor = VTFrameProcessor()
     
-    func run(_ input: UIImage, factor: Float) async throws -> UIImage {
+    private var configuration: VTLowLatencySuperResolutionScalerConfiguration
+    private var inputPixelBufferPool: CVPixelBufferPool
+    private var outputPixelBufferPool: CVPixelBufferPool
+    
+    init(input: UIImage, factor: Float) throws {
+        self.inputImage = input
+        self.factor = factor
+        
+        let width = Int(inputImage.size.width)
+        let height = Int(inputImage.size.height)
+        try Self.check(width: width, height: height, factor: factor)
+        configuration = VTLowLatencySuperResolutionScalerConfiguration(frameWidth: width,
+                                                                       frameHeight: height,
+                                                                       scaleFactor: factor)
+        let outPixelBufferAttributes = configuration.destinationPixelBufferAttributes
+        outputPixelBufferPool = try Self.createPixelBufferPool(for: outPixelBufferAttributes)
+        
+        let inPixelBufferAttributes = configuration.sourcePixelBufferAttributes
+        inputPixelBufferPool = try Self.createPixelBufferPool(for: inPixelBufferAttributes)
+    }
 
-        //setup configuration
-        try setup(input.size, factor: factor)
+    func run() async throws -> UIImage {
+    
+        try frameProcessor.startSession(configuration: configuration)
+        defer {
+            frameProcessor.endSession()
+        }
         
-        //enhance
-        let ret = try await enhance(input)
+        let inputBuffer = try await Self.createPixelBuffer(from: inputImage, in: inputPixelBufferPool)
+        guard let sourceFrame = VTFrameProcessorFrame(buffer: inputBuffer,
+                                                      presentationTimeStamp: .zero) else {
+            throw Fault.missingImageBuffer
+        }
         
-        return ret
+        let outputBuffer = try Self.createPixelBuffer(from: outputPixelBufferPool)
+        guard let destinationFrame = VTFrameProcessorFrame(buffer: outputBuffer,
+                                                           presentationTimeStamp: .zero) else {
+            throw Fault.missingImageBuffer
+        }
+        
+        let parameters = VTLowLatencySuperResolutionScalerParameters(sourceFrame: sourceFrame,
+                                                                     destinationFrame: destinationFrame)
+        try await frameProcessor.process(parameters: parameters)
+    
+        let output = try Self.createImage(from: outputBuffer)
+        
+        return output
+    }
+}
+
+extension DZLowLatencySRScaler {
+    
+    static var isSupported: Bool {
+        VTLowLatencySuperResolutionScalerConfiguration.isSupported
     }
     
-    private func check(width: Int, height: Int, factor: Float) throws {
+    static var maximumDimensions: CMVideoDimensions? {
+        VTLowLatencySuperResolutionScalerConfiguration.maximumDimensions
+    }
+    
+    static var minimumDimensions: CMVideoDimensions? {
+        VTLowLatencySuperResolutionScalerConfiguration.minimumDimensions
+    }
+    
+    static func supportedScaleFactors(size: CGSize) -> [Float] {
+        VTLowLatencySuperResolutionScalerConfiguration.supportedScaleFactors(frameWidth: Int(size.width), frameHeight: Int(size.height))
+    }
+    
+    static func check(width: Int, height: Int, factor: Float) throws {
         
         guard VTLowLatencySuperResolutionScalerConfiguration.isSupported else {
             throw Fault.unsupportedProcessor
@@ -57,82 +112,5 @@ actor DZLowLatencySRScaler: DZPhotoSRScaler {
             .contains(where: { abs($0 - factor) < 0.001 }) else {
             throw Fault.unsupportScaleFactors
         }
-    }
-    
-    private func setup(_ inputSize: CGSize, factor: Float) throws {
-        var isSetupConfiguration: Bool = (configuration == nil)
-        if !isSetupConfiguration {
-            isSetupConfiguration = !inputSize.equalTo(self.inputSize) || factor != self.factor
-        }
-        guard isSetupConfiguration else { return }
-        let width = Int(inputSize.width)
-        let height = Int(inputSize.height)
-        try check(width: width, height: height, factor: factor)
-        let configuration = VTLowLatencySuperResolutionScalerConfiguration(frameWidth: width,
-                                                                           frameHeight: height,
-                                                                           scaleFactor: factor)
-        let destinationPixelBufferAttributes = configuration.destinationPixelBufferAttributes
-        let pixelBufferPool = try Self.createPixelBufferPool(for: destinationPixelBufferAttributes)
-        
-        self.configuration = configuration
-        self.pixelBufferPool = pixelBufferPool
-        self.sourcePixelBufferAttributes = configuration.sourcePixelBufferAttributes
-        self.inputSize = inputSize
-        self.factor = factor
-    }
-    
-    private func enhance(_ input: UIImage) async throws -> UIImage {
-    
-        var frameProcessor = self.frameProcessor
-        if frameProcessor == nil {
-            frameProcessor = VTFrameProcessor()
-            self.frameProcessor = frameProcessor
-        }
-        
-        try frameProcessor!.startSession(configuration: configuration!)
-        defer {
-            frameProcessor!.endSession()
-        }
-        
-        let inputBuffer = try Self.pixelBuffer(from: input, with: sourcePixelBufferAttributes)
-        guard let sourceFrame = VTFrameProcessorFrame(buffer: inputBuffer,
-                                                      presentationTimeStamp: .zero) else {
-            throw Fault.missingImageBuffer
-        }
-        
-        let outputBuffer = try Self.createPixelBuffer(from: pixelBufferPool!)
-        guard let destinationFrame = VTFrameProcessorFrame(buffer: outputBuffer,
-                                                           presentationTimeStamp: .zero) else {
-            throw Fault.missingImageBuffer
-        }
-        
-        let parameters = VTLowLatencySuperResolutionScalerParameters(sourceFrame: sourceFrame,
-                                                                     destinationFrame: destinationFrame)
-        try await frameProcessor!.process(parameters: parameters)
-    
-        let output = try Self.image(from: outputBuffer)
-        
-        self.frameProcessor = nil
-        
-        return output
-    }
-}
-
-extension DZLowLatencySRScaler {
-    
-    static var isSupported: Bool {
-        VTLowLatencySuperResolutionScalerConfiguration.isSupported
-    }
-    
-    static var maximumDimensions: CMVideoDimensions? {
-        VTLowLatencySuperResolutionScalerConfiguration.maximumDimensions
-    }
-    
-    static var minimumDimensions: CMVideoDimensions? {
-        VTLowLatencySuperResolutionScalerConfiguration.minimumDimensions
-    }
-    
-    static func supportedScaleFactors(size: CGSize) -> [Float] {
-        VTLowLatencySuperResolutionScalerConfiguration.supportedScaleFactors(frameWidth: Int(size.width), frameHeight: Int(size.height))
     }
 }

@@ -32,16 +32,7 @@ final class ContentViewData {
     
     var duration: Int? = nil
 
-    var scalerType: SRScalerType = .lowlatency {
-        didSet {
-            guard oldValue != scalerType else { return }
-            switch scalerType {
-            case .lowlatency: scaler = DZLowLatencySRScaler()
-            case .normal:     scaler = DZLowLatencySRScaler()
-            }
-        }
-    }
-    private var scaler: DZPhotoSRScaler = DZLowLatencySRScaler()
+    var scalerType: SRScalerType = .lowlatency
         
     var shareItems: [UIImage] {
         outputImage != nil ? [outputImage!] : []
@@ -54,14 +45,12 @@ final class ContentViewData {
         factor = nil
         duration = nil
     }
-    
-    func process() async throws {
-        guard let inputImage = inputImage else { return }
-        guard let factor = factor else { return }
-        let start = Int(CACurrentMediaTime()*1000)
-        outputImage = try await scaler.run(inputImage, factor: factor)
-        let end = Int(CACurrentMediaTime()*1000)
-        duration = end-start
+}
+
+extension ContentViewData {
+    enum Fault: Error {
+        case inputIsNil
+        case unsupportEffect
     }
 }
 
@@ -98,6 +87,30 @@ extension ContentViewData {
         switch scalerType {
         case .lowlatency: return DZLowLatencySRScaler.minimumDimensions
         case .normal: return nil
+        }
+    }
+}
+
+extension ContentViewData {
+    
+    @MainActor
+    func process() async throws {
+        let start = Int(CACurrentMediaTime()*1000)
+        let scaler = try createPhotoSRScaler(type: scalerType)
+        self.outputImage = try await scaler.run()
+        let end = Int(CACurrentMediaTime()*1000)
+        self.duration = end-start
+    }
+    
+    private func createPhotoSRScaler(type: SRScalerType) throws -> DZPhotoSRScaler {
+        guard let input = inputImage, let factor = factor else {
+            throw Fault.inputIsNil
+        }
+        switch type {
+        case .lowlatency:
+            return try DZLowLatencySRScaler(input: input, factor: factor)
+        case .normal:
+            throw Fault.unsupportEffect
         }
     }
 }
