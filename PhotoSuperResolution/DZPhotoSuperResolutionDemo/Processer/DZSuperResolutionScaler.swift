@@ -88,7 +88,7 @@ actor DZNormalSRScaler: DZPhotoSRScaler {
         
         try await frameProcessor.process(parameters: parameters)
         
-        let outputImage = try Self.createImage(from: inputBuffer)
+        let outputImage = try Self.createImage(from: outputBuffer)
         
         return outputImage
     }
