@@ -15,27 +15,40 @@ struct DZToolsView: View {
     @State private var isShowShare: Bool = false
 
     var body: some View {
-        HStack() {
         
-            ToolButton("play") { process() }
-                .disabled(!datas.isSupport || datas.inputImage == nil)
+        VStack(alignment: .trailing) {
             
-            ToolButton("arrow.trianglehead.counterclockwise") { datas.reset() }
+            HStack {
+                
+                Spacer()
+                
+                if !datas.supportFactors.isEmpty {
+                    FactorMenu("factor")
+                }
+                
+                ProcesserMenu("scaler")
+            }
             
-            ToolButton("tray.and.arrow.down") { save() }
-                .disabled(datas.outputImage == nil)
-            
-            let shareItems = (datas.outputImage != nil ? [datas.outputImage!] : [])
-            ToolButton("square.and.arrow.up") { isShowShare = true }
-                .share(isShown: $isShowShare, items: shareItems)
-                .disabled(datas.outputImage == nil)
-            
-            if !datas.supportFactors.isEmpty {
-                FactorMenu("factor")
+            HStack() {
+
+                Spacer()
+                
+                ToolButton("play") { process() }
+                    .disabled(!datas.isSupport || datas.inputImage == nil)
+                
+                ToolButton("arrow.trianglehead.counterclockwise") { datas.reset() }
+                
+                ToolButton("tray.and.arrow.down") { save() }
+                    .disabled(datas.outputImage == nil)
+                
+                let shareItems = (datas.outputImage != nil ? [datas.outputImage!] : [])
+                ToolButton("square.and.arrow.up") { isShowShare = true }
+                    .share(isShown: $isShowShare, items: shareItems)
+                    .disabled(datas.outputImage == nil)
             }
         }
+        .frame(minHeight: 44.0*2)
         .padding()
-        .frame(minHeight: 44.0)
         .ErrorAlert(message: $infoMsg)
     }
     
@@ -50,18 +63,31 @@ struct DZToolsView: View {
     
     @ViewBuilder
     private func FactorMenu(_ title: String) -> some View {
-        Picker(title, selection: Binding(
-            get: { datas.factor ?? 0 },
+        Picker(title, selection: Binding<Float?>(
+            get: { datas.factor },
             set: { datas.factor = $0})
         ){
             ForEach(datas.supportFactors, id: \.self) { factor in
                 Text(String(format: "x%.1f", factor))
-                    .tag(factor)
+                    .tag(Optional(factor))
             }
         }
         .pickerStyle(.menu)
         .frame(minWidth: 80.0)
         .disabled(datas.factor == nil)
+    }
+    
+    @ViewBuilder
+    private func ProcesserMenu(_ title: String) -> some View {
+        Picker("Scaler Type", selection: Binding(
+            get: { datas.scalerType },
+            set: { datas.scalerType = $0 })) {
+            ForEach(SRScalerType.allCases, id: \.self) { type in
+                Text(type.rawValue.capitalized).tag(type)
+            }
+        }
+        .pickerStyle(.menu)
+        .frame(minWidth: 80.0)
     }
     
     private func save() {
@@ -77,14 +103,31 @@ struct DZToolsView: View {
     }
     
     private func process() {
-        datas.state = .processing
         Task {
             defer { datas.state = .completed }
             do {
-                let start = Int(CACurrentMediaTime()*1000)
-                datas.outputImage = try await datas.createSRScaler().run()
-                let end = Int(CACurrentMediaTime()*1000)
-                datas.duration = end-start
+                let scaler = try datas.createSRScaler()
+                let isUseModel = await scaler.isNeedDownloadModel
+                if isUseModel {
+                    let dStart = Int(CACurrentMediaTime()*1000)
+                    let downloader = await scaler.modelDownloader()!
+                    for try await p in downloader.download() {
+                        datas.state = .downing(progress: p)
+                    }
+                    let dEnd = Int(CACurrentMediaTime()*1000)
+                    datas.downloadDuration = dEnd-dStart
+                    datas.state = .processing
+                    let pStart = Int(CACurrentMediaTime()*1000)
+                    datas.outputImage = try await scaler.run()
+                    let pEnd = Int(CACurrentMediaTime()*1000)
+                    datas.processDuration = pEnd-pStart
+                } else {
+                    datas.state = .processing
+                    let start = Int(CACurrentMediaTime()*1000)
+                    datas.outputImage = try await scaler.run()
+                    let end = Int(CACurrentMediaTime()*1000)
+                    datas.processDuration = end-start
+                }
             }
             catch { infoMsg = String(describing: error) }
         }

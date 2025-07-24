@@ -13,9 +13,8 @@ actor DZLowLatencySRScaler: DZPhotoSRScaler {
     
     private let inputImage: UIImage
     private let factor: Float
-    private var inputSize: CGSize { inputImage.size }
     
-    nonisolated(unsafe) let frameProcessor: VTFrameProcessor = VTFrameProcessor()
+    private nonisolated(unsafe) let frameProcessor: VTFrameProcessor = VTFrameProcessor()
     
     private var configuration: VTLowLatencySuperResolutionScalerConfiguration
     private var inputPixelBufferPool: CVPixelBufferPool
@@ -24,7 +23,7 @@ actor DZLowLatencySRScaler: DZPhotoSRScaler {
     init(input: UIImage, factor: Float) throws {
         self.inputImage = input
         self.factor = factor
-        
+
         let width = Int(inputImage.size.width)
         let height = Int(inputImage.size.height)
         try Self.check(width: width, height: height, factor: factor)
@@ -41,9 +40,7 @@ actor DZLowLatencySRScaler: DZPhotoSRScaler {
     func run() async throws -> UIImage {
     
         try frameProcessor.startSession(configuration: configuration)
-        defer {
-            frameProcessor.endSession()
-        }
+        defer { frameProcessor.endSession() }
         
         let inputBuffer = try await Self.createPixelBuffer(from: inputImage, in: inputPixelBufferPool)
         guard let sourceFrame = VTFrameProcessorFrame(buffer: inputBuffer,

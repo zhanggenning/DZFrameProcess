@@ -25,14 +25,25 @@ struct DZInfoView: View {
             HStack {
                 if let maxSize = datas.maxSize {
                     Text("Max: \(maxSize.width)x\(maxSize.height)")
+                } else {
+                    Text("Max: nil")
                 }
                 if let minSize = datas.minSize {
                     Text("Min: \(minSize.width) x \(minSize.height)")
+                } else {
+                    Text("Min: nil")
                 }
             }
-            if let duration = datas.duration {
-                Text("Duration: \(duration)mm")
+            HStack {
+                if let duration = datas.processDuration {
+                    Text("Process: \(duration)mm")
+                }
+                
+                if let duration = datas.downloadDuration {
+                    Text("Download: \(duration)mm")
+                }
             }
+
         }.font(.system(size: 13.0))
     }
 }

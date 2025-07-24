@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2F5B88692E2E5B82002186D4 /* VideoToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F5B88682E2E5B82002186D4 /* VideoToolbox.framework */; };
 		2FCA88ED2E2F8023000D42FB /* DZPhotoSuperResolutionDemoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCA88EA2E2F8023000D42FB /* DZPhotoSuperResolutionDemoApp.swift */; };
 		2FCA88EE2E2F8023000D42FB /* ContentViewData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCA88E92E2F8023000D42FB /* ContentViewData.swift */; };
 		2FCA88EF2E2F8023000D42FB /* DZUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCA88E52E2F8023000D42FB /* DZUtil.swift */; };
@@ -24,7 +23,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		2F5B88682E2E5B82002186D4 /* VideoToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VideoToolbox.framework; path = System/Library/Frameworks/VideoToolbox.framework; sourceTree = SDKROOT; };
 		2FCA88E02E2F8023000D42FB /* DZLowLatencySuperResolutionScaler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DZLowLatencySuperResolutionScaler.swift; sourceTree = "<group>"; };
 		2FCA88E12E2F8023000D42FB /* DZPhotoSRScaler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DZPhotoSRScaler.swift; sourceTree = "<group>"; };
 		2FCA88E42E2F8023000D42FB /* DZSwiftUIHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DZSwiftUIHelper.swift; sourceTree = "<group>"; };
@@ -46,21 +44,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2F5B88692E2E5B82002186D4 /* VideoToolbox.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		2F5B88672E2E5B81002186D4 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				2F5B88682E2E5B82002186D4 /* VideoToolbox.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 		2FCA88E32E2F8023000D42FB /* Processer */ = {
 			isa = PBXGroup;
 			children = (
@@ -109,7 +98,6 @@
 			isa = PBXGroup;
 			children = (
 				2FCA88EC2E2F8023000D42FB /* DZPhotoSuperResolutionDemo */,
-				2F5B88672E2E5B81002186D4 /* Frameworks */,
 				2FEDB8C22E28AC1300961C82 /* Products */,
 			);
 			sourceTree = "<group>";

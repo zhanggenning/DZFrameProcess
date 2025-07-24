@@ -14,23 +14,26 @@ final class DZPhotoProcesser {
     
     enum Fault: Error {
         case inputIsNil
+        case upsupportFactor
         case unsupportEffect
     }
     
     static func createPhotoSRScaler(effect: SRScalerType,
                                     inputImage: UIImage?,
                                     factor: Float?) throws -> DZPhotoSRScaler {
-        guard let input = inputImage, let factor = factor else {
+        guard let input = inputImage else {
             throw Fault.inputIsNil
+        }
+        guard let factor = factor else {
+            throw Fault.upsupportFactor
         }
         switch effect {
         case .lowlatency:
             return try DZLowLatencySRScaler(input: input, factor: factor)
         case .normal:
-            throw Fault.unsupportEffect
+            return try DZNormalSRScaler(inputImage: input, factor: Int(factor))
         }
     }
-
 }
 
 extension DZPhotoProcesser {
@@ -40,20 +43,22 @@ extension DZPhotoProcesser {
         switch effect {
         case .lowlatency:
             return VTLowLatencySuperResolutionScalerConfiguration.isSupported
-        case .normal: return false
+        case .normal:
+            return VTSuperResolutionScalerConfiguration.isSupported
         }
     }
     
     //支持的缩放倍数
     static func supportFactors(for effect: SRScalerType,
-                               size: CGSize) -> [Float] {
-        let w = Int(size.width), h = Int(size.height)
+                               size: CGSize?) -> [Float] {
         switch effect {
         case .lowlatency:
+            guard let size = size else { return [] }
+            let w = Int(size.width), h = Int(size.height)
             return VTLowLatencySuperResolutionScalerConfiguration.supportedScaleFactors(frameWidth: w,
                                                                                         frameHeight: h)
         case .normal:
-            return []
+            return VTSuperResolutionScalerConfiguration.supportedScaleFactors.map { Float($0) }
         }
     }
     
@@ -63,7 +68,7 @@ extension DZPhotoProcesser {
         case .lowlatency:
             return  VTLowLatencySuperResolutionScalerConfiguration.maximumDimensions
         case .normal:
-            return nil
+            return VTSuperResolutionScalerConfiguration.maximumDimensions
         }
     }
     
@@ -73,13 +78,16 @@ extension DZPhotoProcesser {
         case .lowlatency:
             return VTLowLatencySuperResolutionScalerConfiguration.minimumDimensions
         case .normal:
-            return nil
+            return VTSuperResolutionScalerConfiguration.minimumDimensions
         }
     }
+    
+    //是否需要模型
+    static func isNeedModel(for effect: SRScalerType) -> Bool { effect == .normal }
 }
 
 
-enum SRScalerType {
-    case lowlatency
-    case normal
+enum SRScalerType: String, CaseIterable {
+    case lowlatency = "Lowlatency"
+    case normal = "Normal"
 }

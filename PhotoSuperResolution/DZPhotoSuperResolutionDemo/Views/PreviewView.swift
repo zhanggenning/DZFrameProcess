@@ -37,13 +37,10 @@ struct DZPreviewView: View {
     private func loadSelectedPhoto() {
         guard let selectedPhoto = selectedPhoto else { return }
         Task { @MainActor in
+            defer { self.selectedPhoto = nil }
             do {
                 if let data = try await selectedPhoto.loadTransferable(type: Data.self) {
-                    let uiImage = UIImage(data: data)
-                    datas.inputImage = uiImage
-                    datas.outputImage = nil
-                    datas.factor = datas.supportFactors.last
-                    datas.state = .idle
+                    datas.inputImage = UIImage(data: data)
                 }
             } catch {
                 print("Failed to load image: \(error)")

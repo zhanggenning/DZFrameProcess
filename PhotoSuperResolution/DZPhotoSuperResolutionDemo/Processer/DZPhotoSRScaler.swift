@@ -7,13 +7,27 @@
 
 import Foundation
 import UIKit
+import SwiftUI
 @preconcurrency import VideoToolbox
 
 protocol DZPhotoSRScaler: Actor {
     
     typealias Fault = DZPhotoProcessError
+    
+    var isNeedDownloadModel: Bool { get }
 
+    func modelDownloader() -> DZModelDownloader?
+    
     func run() async throws -> UIImage
+}
+
+extension DZPhotoSRScaler {
+    var isNeedDownloadModel: Bool { false }
+    func modelDownloader() -> DZModelDownloader? { nil }
+}
+
+protocol DZModelDownloader: Actor {
+    nonisolated func download() -> AsyncThrowingStream<Float, Error>
 }
 
 extension DZPhotoSRScaler {
@@ -79,6 +93,10 @@ enum DZPhotoProcessError: Error {
     case failedToCreateCGContext
     case failedToCreateCGImage
     case missingImageBuffer
+    case failedToCreateSRSConfiguration
+    case modelIsNotReady
+    case failedToDownloadmodel
+    case failedToCreateSRSParameters
 }
 
 actor DZPhotoProcessContext {
