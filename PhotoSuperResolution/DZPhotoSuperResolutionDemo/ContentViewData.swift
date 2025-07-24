@@ -58,7 +58,7 @@ final class ContentViewData {
     var downloadDuration: Int? = nil
     var processDuration: Int? = nil
 
-    var scalerType: SRScalerType = .lowlatency {
+    var scalerType: SRScalerType = .normal {
         didSet {
             guard oldValue != scalerType else { return }
             factor = supportFactors.first

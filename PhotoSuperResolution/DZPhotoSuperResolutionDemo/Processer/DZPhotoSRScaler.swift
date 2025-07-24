@@ -33,7 +33,7 @@ protocol DZModelDownloader: Actor {
 extension DZPhotoSRScaler {
     
     static func createPixelBufferPool(for pixelBufferAttributes: [String: Any],
-                                      count: Int = 2) throws -> CVPixelBufferPool {
+                                      count: Int = 1) throws -> CVPixelBufferPool {
 
         let pixelBufferPoolAttributes = [kCVPixelBufferPoolMinimumBufferCountKey as String: count]
 
@@ -72,13 +72,14 @@ extension DZPhotoSRScaler {
     }
     
     static func createImage(from buffer: CVPixelBuffer) throws -> UIImage {
-        var cgImage: CGImage?
-        let status = VTCreateCGImageFromCVPixelBuffer(buffer, options: nil, imageOut: &cgImage)
-        guard status == kCVReturnSuccess, let cgImage = cgImage else {
-            throw Fault.failedToCreateCGImage
+        return try autoreleasepool {
+            var cgImage: CGImage?
+            let status = VTCreateCGImageFromCVPixelBuffer(buffer, options: nil, imageOut: &cgImage)
+            guard status == kCVReturnSuccess, let cgImage = cgImage else {
+                throw Fault.failedToCreateCGImage
+            }
+            return UIImage(cgImage: cgImage)
         }
-        let ret = UIImage(cgImage: cgImage)
-        return ret
     }
 }
 
@@ -121,5 +122,10 @@ actor DZPhotoProcessContext {
             bounds: CGRect(origin: .zero, size: size),
             colorSpace: colorSpace
         )
+        ctx.clearCaches()
+    }
+    
+    public func clean() {
+        ctx.clearCaches()
     }
 }

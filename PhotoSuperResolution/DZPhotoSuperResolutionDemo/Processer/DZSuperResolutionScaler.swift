@@ -27,12 +27,9 @@ actor DZNormalSRScaler: DZPhotoSRScaler {
     var downingProgress: Float { configuration.configurationModelPercentageAvailable }
     
     init(inputImage: UIImage, factor: Int) throws {
+        
         self.inputImage = inputImage
         self.factor = factor
-        
-        let maxW = VTSuperResolutionScalerConfiguration.maximumDimensions
-        let minW = VTSuperResolutionScalerConfiguration.minimumDimensions
-        let factors = VTSuperResolutionScalerConfiguration.supportedScaleFactors
         
         let width = Int(inputImage.size.width)
         let height = Int(inputImage.size.height)
@@ -57,7 +54,11 @@ actor DZNormalSRScaler: DZPhotoSRScaler {
     
     func run() async throws -> UIImage {
         try frameProcessor.startSession(configuration: configuration)
-        defer { frameProcessor.endSession() }
+        defer {
+            CVPixelBufferPoolFlush(inputPixelBufferPool, .excessBuffers)
+            CVPixelBufferPoolFlush(outputPixelBufferPool, .excessBuffers)
+            frameProcessor.endSession()
+        }
         
         guard configuration.configurationModelStatus == .ready else {
             throw Fault.modelIsNotReady
@@ -79,7 +80,7 @@ actor DZNormalSRScaler: DZPhotoSRScaler {
                                                            previousFrame: nil,
                                                            previousOutputFrame: nil,
                                                            opticalFlow: nil,
-                                                           submissionMode: .sequential,
+                                                           submissionMode: .random,
                                                            destinationFrame: destinationFrame)
         guard let parameters = parameters else {
             throw Fault.failedToCreateSRSParameters
@@ -87,9 +88,9 @@ actor DZNormalSRScaler: DZPhotoSRScaler {
         
         try await frameProcessor.process(parameters: parameters)
         
-        let output = try Self.createImage(from: outputBuffer)
+        let outputImage = try Self.createImage(from: inputBuffer)
         
-        return output
+        return outputImage
     }
     
     func modelDownloader() -> (any DZModelDownloader)? { self }
